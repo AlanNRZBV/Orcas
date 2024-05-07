@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import mongoose from 'mongoose';
+import mongoose, { Mongoose, MongooseError } from 'mongoose';
 import { imagesUpload } from '../multer';
 import crypto from 'crypto';
 import { OAuth2Client } from 'google-auth-library';
@@ -16,7 +16,8 @@ usersRouter.post('/', imagesUpload.single('avatar'), async (req, res, next) => {
       avatar: req.file ? req.file.filename : null,
       email: req.body.email,
       password: req.body.password,
-      displayName: req.body.displayName,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
     };
 
     const user = new User(userData);
@@ -26,10 +27,10 @@ usersRouter.post('/', imagesUpload.single('avatar'), async (req, res, next) => {
 
     res.send(user);
   } catch (e) {
-    next(e);
     if (e instanceof mongoose.Error.ValidationError) {
       return res.status(422).send(e);
     }
+    next(e);
   }
 });
 
@@ -90,6 +91,7 @@ usersRouter.post('/google', async (req, res, next) => {
       idToken: req.body.credential,
       audience: config.google.clientId,
     });
+
     const payload = ticket.getPayload();
 
     if (!payload) {
@@ -98,7 +100,8 @@ usersRouter.post('/google', async (req, res, next) => {
 
     const email = payload['email'];
     const id = payload['sub'];
-    const displayName = payload['name'];
+    const firstName = payload['given_name'];
+    const lastName = payload['family_name'];
     const avatar = payload['picture'];
 
     if (!email) {
@@ -112,7 +115,8 @@ usersRouter.post('/google', async (req, res, next) => {
         email,
         password: crypto.randomUUID(),
         googleID: id,
-        displayName,
+        firstName,
+        lastName,
         avatar,
       });
     }

@@ -14,9 +14,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { selectRegisterError } from './usersSlice';
 import { googleLogin, register } from './usersThunks';
 import { GoogleLogin } from '@react-oauth/google';
-import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
-import {RegisterMutation} from "../../types";
-import FileInput from "../../components/UI/FileInput/FileInput.tsx";
+import { useAppDispatch, useAppSelector } from '../../app/hooks.ts';
+import { RegisterMutation } from '../../types';
+import FileInput from '../../components/UI/FileInput/FileInput.tsx';
 
 const Register = () => {
   const dispatch = useAppDispatch();
@@ -26,6 +26,8 @@ const Register = () => {
   const [state, setState] = useState<RegisterMutation>({
     email: '',
     password: '',
+    firstName: '',
+    lastName: '',
     avatar: null,
   });
 
@@ -99,6 +101,7 @@ const Register = () => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
+                required
                 label="Email"
                 name="email"
                 value={state.email}
@@ -111,14 +114,41 @@ const Register = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                required
                 name="password"
-                label="Password"
+                label="Пароль"
                 type="password"
                 value={state.password}
                 onChange={inputChangeHandler}
                 autoComplete="new-password"
                 error={Boolean(getFieldError('password'))}
                 helperText={getFieldError('password')}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                label="Имя"
+                name="firstName"
+                value={state.firstName}
+                onChange={inputChangeHandler}
+                autoComplete="new-firstName"
+                error={Boolean(getFieldError('Имя'))}
+                helperText={getFieldError('Имя')}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                label="Фамилия"
+                name="lastName"
+                value={state.lastName}
+                onChange={inputChangeHandler}
+                autoComplete="new-lastName"
+                error={Boolean(getFieldError('Фамилия'))}
+                helperText={getFieldError('Фамилия')}
                 fullWidth
               />
             </Grid>

@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { User } from '../../../types';
 import { Box, Button, Menu, MenuItem } from '@mui/material';
 import { useAppDispatch } from '../../../app/hooks.ts';
 import Image from 'mui-image';
 import imageNotAvailable from '../../../assets/images/image_not_available.png';
 import { apiURL } from '../../../constants.ts';
-import {logout} from "../../../features/Users/usersThunks.ts";
+import { logout } from '../../../features/Users/usersThunks.ts';
 
 interface Props {
   user: User;
 }
 
-const UserMenu: React.FC<Props> = ({ user }) => {
+const UserMenu: FC<Props> = ({ user }) => {
   const dispatch = useAppDispatch();
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -38,10 +38,12 @@ const UserMenu: React.FC<Props> = ({ user }) => {
     dispatch(logout());
   };
 
+  const lastNameShorted = user.lastName.charAt(0);
+
   return (
     <Box display="flex" alignItems="center">
       <Button color="inherit" onClick={handleClick} sx={{ flexShrink: '0' }}>
-        Hello, {user.displayName}!
+        Hello, {user.firstName} {lastNameShorted}.
       </Button>
       <Image
         src={avatarImage}

@@ -20,10 +20,6 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
     type: String,
     required: true,
   },
-  middleName: {
-    type: String,
-    required: true,
-  },
   password: {
     type: String,
     required: true,
@@ -35,7 +31,8 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
   role: {
     type: String,
     required: true,
-    enum: ['employee', 'owner'],
+    enum: ['employee', 'owner', 'unassigned'],
+    default: 'unassigned',
   },
   googleID: String,
   avatar: {

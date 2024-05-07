@@ -1,9 +1,9 @@
-
-
 export interface RegisterMutation {
   email: string;
   password: string;
-  avatar: File | null;
+  firstName: string;
+  lastName: string;
+  avatar: File | string | null;
 }
 
 export interface LoginMutation {
@@ -15,8 +15,9 @@ export interface User {
   _id: string;
   email: string;
   token: string;
+  firstName: string;
+  lastName: string;
   role: string;
-  displayName: string;
   avatar?: string;
   googleID?: string;
 }

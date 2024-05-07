@@ -3,15 +3,15 @@ import { Model } from 'mongoose';
 export interface IUser {
   email: string;
   password: string;
-  displayName: string;
   avatar: string | null;
+  firstName: string;
+  lastName: string;
 }
 
 export interface UserFields {
   email: string;
   firstName: string;
   lastName: string;
-  middleName: string;
   password: string;
   token: string;
   role: string;

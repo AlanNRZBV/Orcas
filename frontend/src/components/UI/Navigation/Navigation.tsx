@@ -1,9 +1,9 @@
-import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Toolbar, Typography } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks.ts';
 import UserMenu from './UserMenu.tsx';
 import AnonymousMenu from './AnonymousMenu.tsx';
-import {selectUser} from "../../../features/Users/usersSlice.ts";
+import { selectUser } from '../../../features/Users/usersSlice.ts';
 
 const Navigation = () => {
   const user = useAppSelector(selectUser);
@@ -17,18 +17,9 @@ const Navigation = () => {
           color="white"
           sx={{ mr: 'auto', textDecoration: 'none' }}
         >
-          Spotify
+          Orcas
         </Typography>
         <Box display="flex" alignItems="center">
-          <Button
-            to="/"
-            component={NavLink}
-            color="success"
-            variant="contained"
-            sx={{ mr: 2 }}
-          >
-            Home
-          </Button>
           {user ? <UserMenu user={user} /> : <AnonymousMenu />}
         </Box>
       </Toolbar>

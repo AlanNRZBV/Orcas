@@ -1,11 +1,19 @@
-import {combineReducers, configureStore} from '@reduxjs/toolkit';
-import {FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE,} from 'redux-persist';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  persistReducer,
+  persistStore,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import {usersReducer} from "../features/Users/usersSlice.ts";
-
+import { usersReducer } from '../features/Users/usersSlice.ts';
 
 const usersPersistConfig = {
-  key: 'spotify:users',
+  key: 'orcas:users',
   storage: storage,
   whitelist: ['user'],
 };
