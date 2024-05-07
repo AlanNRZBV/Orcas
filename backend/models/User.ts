@@ -16,7 +16,7 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
     type: String,
     required: true,
   },
-  secondName: {
+  lastName: {
     type: String,
     required: true,
   },

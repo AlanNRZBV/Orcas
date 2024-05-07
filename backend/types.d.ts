@@ -10,7 +10,7 @@ export interface IUser {
 export interface UserFields {
   email: string;
   firstName: string;
-  secondName: string;
+  lastName: string;
   middleName: string;
   password: string;
   token: string;
@@ -24,4 +24,4 @@ export interface UserMethods {
   generateToken(): void;
 }
 
-type UserModel = Model<UserField, object, UserMethods>;
+type UserModel = Model<UserFields, object, UserMethods>;
