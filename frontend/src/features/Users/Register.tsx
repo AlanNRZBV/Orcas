@@ -12,10 +12,10 @@ import {
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { selectRegisterError } from './usersSlice';
-import { googleLogin, register } from './usersThunks';
+import { googleLogin, login, register } from './usersThunks';
 import { GoogleLogin } from '@react-oauth/google';
 import { useAppDispatch, useAppSelector } from '../../app/hooks.ts';
-import { RegisterMutation } from '../../types';
+import { LoginMutation, RegisterMutation } from '../../types';
 import FileInput from '../../components/UI/FileInput/FileInput.tsx';
 
 const Register = () => {
@@ -52,6 +52,11 @@ const Register = () => {
     console.log(state);
     try {
       await dispatch(register(state)).unwrap();
+      const loginData: LoginMutation = {
+        email: state.email,
+        password: state.password,
+      };
+      await dispatch(login(loginData)).unwrap();
       navigate('/');
     } catch (e) {
       console.log('Caught on try - REGISTER SUBMIT FORM - ', e);
