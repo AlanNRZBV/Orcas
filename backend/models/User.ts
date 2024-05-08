@@ -31,7 +31,7 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
   role: {
     type: String,
     required: true,
-    enum: ['employee', 'owner', 'unassigned'],
+    enum: ['user', 'admin', 'unassigned'],
     default: 'unassigned',
   },
   googleID: String,
