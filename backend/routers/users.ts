@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import mongoose, { Mongoose, MongooseError } from 'mongoose';
+import mongoose from 'mongoose';
 import { imagesUpload } from '../multer';
 import crypto from 'crypto';
 import { OAuth2Client } from 'google-auth-library';
