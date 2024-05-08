@@ -1,5 +1,17 @@
 import { Model } from 'mongoose';
 
+export interface TeamMember {
+  userId: string;
+  fistName: string;
+  lastName: string;
+  teamRole: string;
+}
+export interface ProjectData {
+  name: string;
+  team: TeamMember[];
+  expireAt: string;
+}
+
 export interface IUser {
   email: string;
   password: string;

@@ -22,6 +22,14 @@ const ProjectSchema = new Schema({
           message: 'VALIDATOR ERROR: User does not exist!',
         },
       },
+      firstName: {
+        type: String,
+        required: true,
+      },
+      lastName: {
+        type: String,
+        required: true,
+      },
       teamRole: {
         type: String,
         required: true,
