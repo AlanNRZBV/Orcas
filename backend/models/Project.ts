@@ -6,30 +6,36 @@ const ProjectSchema = new Schema({
     type: String,
     required: true,
   },
-  team: [
-    {
+  team: {
+    type: [Schema.Types.Mixed],
+    required: true,
+    of: {
       userId: {
-        type: Types.ObjectId,
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true,
-        validate: async (value: Types.ObjectId) => {
-          const user = await User.findById(value);
-          return Boolean(user);
+        validate: {
+          validator: async (value: Types.ObjectId) => {
+            const user = await User.findById(value);
+            return Boolean(user);
+          },
+          message: 'VALIDATOR ERROR: User does not exist!',
         },
-        message: 'VALIDATOR ERROR: Пользователь не найден',
       },
       teamRole: {
         type: String,
-        enum: ['дизайнер', 'менеджер', 'арт директор', 'визуализатор', 'чертежник', 'комплектатор'],
+        required: true,
+        enum: ['дизайнер', 'менеджер', 'арт-директор', 'визуализатор', 'чертежник', 'комплектатор'],
       },
     },
-  ],
+  },
   createdAt: {
-    type: Date(),
+    type: Date,
     required: true,
     default: new Date(),
   },
   expireAt: {
-    type: Date(),
+    type: Date,
     required: true,
   },
   isComplete: {
