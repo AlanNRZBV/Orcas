@@ -21,7 +21,6 @@ const StudioSchema = new mongoose.Schema({
         message: 'VALIDATOR ERROR: User does not exist!',
       },
     },
-    required: true,
   },
   projects: [
     {
@@ -36,25 +35,21 @@ const StudioSchema = new mongoose.Schema({
       },
     },
   ],
-  staff: {
-    type: [
-      {
-        userId: {
-          type: Schema.Types.ObjectId,
-          ref: 'User',
-          required: true,
-          validate: {
-            validator: async (value: Types.ObjectId) => {
-              const user = await User.findById(value);
-              return Boolean(user);
-            },
-            message: 'VALIDATOR ERROR: User does not exist!',
+  staff: [
+    {
+      userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        validate: {
+          validator: async (value: Types.ObjectId) => {
+            const user = await User.findById(value);
+            return Boolean(user);
           },
+          message: 'VALIDATOR ERROR: User does not exist!',
         },
       },
-    ],
-    required: true,
-  },
+    },
+  ],
   teams: [
     {
       teamId: {

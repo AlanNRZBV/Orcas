@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon index.ts",
     "format": "npx prettier . -w",
-    "seed": "ts-node fixture.ts",
+    "seed": "ts-node fixtures.ts",
     "lint": "eslint \"**/*.ts\""
   },
   "keywords": [],

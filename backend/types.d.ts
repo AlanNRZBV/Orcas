@@ -1,10 +1,25 @@
 import { Model } from 'mongoose';
 
+export interface StudioData {
+  name: string;
+  owner: string;
+  staff: string[];
+  teams: Team[];
+  projects: IProject[];
+}
+
+export interface Team {
+  name: string;
+  members: TeamMember[];
+}
 export interface TeamMember {
   userId: string;
-  fistName: string;
-  lastName: string;
   teamRole: string;
+}
+
+export interface IProject {
+  name: string;
+  team: Team;
 }
 export interface ProjectData {
   name: string;
@@ -27,6 +42,11 @@ export interface UserFields {
   password: string;
   token: string;
   role: string;
+  spec: {
+    name: string;
+    rank: string;
+  };
+  isOwner: boolean;
   googleID: string;
   avatar: string;
 }
