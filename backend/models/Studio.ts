@@ -1,6 +1,7 @@
 import mongoose, { model, Schema, Types } from 'mongoose';
 import Project from './Project';
 import User from './User';
+import Team from './Team';
 
 const StudioSchema = new mongoose.Schema({
   name: {
@@ -20,6 +21,7 @@ const StudioSchema = new mongoose.Schema({
         message: 'VALIDATOR ERROR: User does not exist!',
       },
     },
+    required: true,
   },
   projects: [
     {
@@ -34,48 +36,38 @@ const StudioSchema = new mongoose.Schema({
       },
     },
   ],
-  staff: [
-    {
-      userId: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-        validate: {
-          validator: async (value: Types.ObjectId) => {
-            const user = await User.findById(value);
-            return Boolean(user);
+  staff: {
+    type: [
+      {
+        userId: {
+          type: Schema.Types.ObjectId,
+          ref: 'User',
+          required: true,
+          validate: {
+            validator: async (value: Types.ObjectId) => {
+              const user = await User.findById(value);
+              return Boolean(user);
+            },
+            message: 'VALIDATOR ERROR: User does not exist!',
           },
-          message: 'VALIDATOR ERROR: User does not exist!',
         },
       },
-    },
-  ],
+    ],
+    required: true,
+  },
   teams: [
     {
-      name: {
-        type: String,
-        required: true,
-      },
-      members: [
-        {
-          userId: {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
-            required: true,
-            validate: {
-              validator: async (value: Types.ObjectId) => {
-                const user = await User.findById(value);
-                return Boolean(user);
-              },
-              message: 'VALIDATOR ERROR: User does not exist!',
-            },
+      teamId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Team',
+        validate: {
+          validator: async (value: Types.ObjectId) => {
+            const team = await Team.findById(value);
+            return Boolean(team);
           },
-          teamRole: {
-            type: String,
-            required: true,
-          },
+          message: 'VALIDATOR ERROR: Team does not exist!',
         },
-      ],
+      },
     },
   ],
 });
