@@ -8,18 +8,16 @@ const ProjectSchema = new Schema({
   },
   team: [
     {
-      type: {
-        teamId: {
-          type: Schema.Types.ObjectId,
-          ref: 'Team',
-          required: true,
-          validate: {
-            validator: async (value: Types.ObjectId) => {
-              const team = await Team.findById(value);
-              return Boolean(team);
-            },
-            message: 'VALIDATOR ERROR: Team does not exist!',
+      teamId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Team',
+        required: true,
+        validate: {
+          validator: async (value: Types.ObjectId) => {
+            const team = await Team.findById(value);
+            return Boolean(team);
           },
+          message: 'VALIDATOR ERROR: Team does not exist!',
         },
       },
     },
