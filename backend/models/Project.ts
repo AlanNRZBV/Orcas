@@ -6,27 +6,7 @@ const ProjectSchema = new Schema({
     type: String,
     required: true,
   },
-  team: [
-    {
-      userId: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-        validate: {
-          validator: async (value: Types.ObjectId) => {
-            const user = await User.findById(value);
-            return Boolean(user);
-          },
-          message: 'VALIDATOR ERROR: User does not exist!',
-        },
-      },
-      teamRole: {
-        type: String,
-        required: true,
-        enum: ['дизайнер', 'менеджер', 'арт-директор', 'визуализатор', 'чертежник', 'комплектатор'],
-      },
-    },
-  ],
+  team: [],
   createdAt: {
     type: Date,
     required: true,
