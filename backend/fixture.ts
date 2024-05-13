@@ -93,38 +93,26 @@ const run = async () => {
         team: [
           {
             userId: owner?._id,
-            firstName: owner?.firstName,
-            lastName: owner?.lastName,
             teamRole: 'арт-директор',
           },
           {
             userId: user?._id,
-            firstName: user?.firstName,
-            lastName: user?.lastName,
             teamRole: 'визуализатор',
           },
           {
             userId: user1?._id,
-            firstName: user1?.firstName,
-            lastName: user1?.lastName,
             teamRole: 'чертежник',
           },
           {
             userId: user2?._id,
-            firstName: user2?.firstName,
-            lastName: user2?.lastName,
             teamRole: 'дизайнер',
           },
           {
             userId: user3?._id,
-            firstName: user3?.firstName,
-            lastName: user3?.lastName,
             teamRole: 'менеджер',
           },
           {
             userId: user4?._id,
-            firstName: user4?.firstName,
-            lastName: user4?.lastName,
             teamRole: 'комплектатор',
           },
         ],

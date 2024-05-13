@@ -9,7 +9,7 @@ const projectsRouter = Router();
 
 projectsRouter.get('/', auth, async (req, res, next) => {
   try {
-    const projects = await Project.find();
+    const projects = await Project.find().populate({ path: 'team.userId', select: 'firstName lastName email' });
 
     const isEmpty = projects.length < 1;
     if (isEmpty) {
