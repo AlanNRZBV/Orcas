@@ -42,11 +42,6 @@ export interface UserFields {
   password: string;
   token: string;
   role: string;
-  spec: {
-    name: string;
-    rank: string;
-  };
-  isOwner: boolean;
   googleID: string;
   avatar: string;
 }

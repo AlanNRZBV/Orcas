@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import { UserFields, UserMethods, UserModel } from '../types';
 import { randomUUID } from 'crypto';
-import { rank, roles } from '../constants';
 
 const SALT_WORK_FACTOR = 10;
 
@@ -28,28 +27,6 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
   token: {
     type: String,
     required: true,
-  },
-  isOwner: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-  spec: {
-    type: {
-      name: {
-        type: String,
-        enum: roles,
-      },
-      rank: {
-        type: String,
-        enum: rank,
-      },
-    },
-    required: true,
-    default: {
-      name: 'unassigned',
-      rank: 'unassigned',
-    },
   },
   role: {
     type: String,

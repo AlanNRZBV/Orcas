@@ -2,6 +2,7 @@ import mongoose, { model, Schema, Types } from 'mongoose';
 import Project from './Project';
 import User from './User';
 import Team from './Team';
+import { rank, roles } from '../constants';
 
 const StudioSchema = new mongoose.Schema({
   name: {
@@ -9,17 +10,15 @@ const StudioSchema = new mongoose.Schema({
     required: true,
   },
   owner: {
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-      validate: {
-        validator: async (value: Types.ObjectId) => {
-          const user = await User.findById(value);
-          return Boolean(user);
-        },
-        message: 'VALIDATOR ERROR: User does not exist!',
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    validate: {
+      validator: async (value: Types.ObjectId) => {
+        const user = await User.findById(value);
+        return Boolean(user);
       },
+      message: 'VALIDATOR ERROR: User does not exist!',
     },
   },
   projects: [
@@ -46,6 +45,23 @@ const StudioSchema = new mongoose.Schema({
             return Boolean(user);
           },
           message: 'VALIDATOR ERROR: User does not exist!',
+        },
+      },
+      spec: {
+        type: {
+          name: {
+            type: String,
+            enum: roles,
+          },
+          rank: {
+            type: String,
+            enum: rank,
+          },
+        },
+        required: true,
+        default: {
+          name: 'unassigned',
+          rank: 'unassigned',
         },
       },
     },
