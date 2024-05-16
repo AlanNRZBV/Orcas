@@ -6,6 +6,7 @@ import config from './config';
 import usersRouter from './routers/users';
 import projectsRouter from './routers/projects';
 import studioRouter from './routers/studio';
+import teamsRouter from './routers/teams';
 
 const app = express();
 const port = 8000;
@@ -17,6 +18,7 @@ app.use(cors());
 app.use('/users', usersRouter);
 app.use('/projects', projectsRouter);
 app.use('/studio', studioRouter);
+app.use('/teams', teamsRouter);
 
 const run = async () => {
   await mongoose.connect(config.mongoose.db);
