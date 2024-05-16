@@ -1,35 +1,51 @@
 import { Router } from 'express';
-import auth from '../middleware/auth';
+import auth, { RequestWithUser } from '../middleware/auth';
 import Project from '../models/Project';
 import { ProjectData } from '../types';
 import mongoose from 'mongoose';
 import permit from '../middleware/permit';
+import Studio from '../models/Studio';
 
 const projectsRouter = Router();
 
-projectsRouter.get('/', auth, async (req, res, next) => {
+projectsRouter.get('/', auth, async (req: RequestWithUser, res, next) => {
   try {
-    const projects = await Project.find().populate({
-      path: 'team',
-      populate: {
-        path: 'teamId',
-        select: '-_id',
+    const user = req.user?._id;
+
+    if ('studio' in req.query) {
+      const id = req.query.studio;
+      const isStudioExists = await Studio.findById(id);
+
+      if (!isStudioExists) {
+        return res.status(404).send({ error: 'Студия не найдена', studio: {} });
+      }
+
+      if (isStudioExists.owner.toString() !== user?.toString()) {
+        return res.status(422).send({ error: 'Нет доступа', studio: {} });
+      }
+
+      const projects = await Project.find({ studioId: id }).populate({
+        path: 'team',
         populate: {
-          path: 'members',
+          path: 'teamId',
           select: '-_id',
           populate: {
-            path: 'userId',
-            select: '-_id firstName lastName spec',
+            path: 'members',
+            select: '-_id',
+            populate: {
+              path: 'userId',
+              select: '-_id firstName lastName spec',
+            },
           },
         },
-      },
-    });
+      });
 
-    const isEmpty = projects.length < 1;
-    if (isEmpty) {
-      return res.status(404).send({ message: 'Нет проектов', projects: [] });
+      const isEmpty = projects.length < 1;
+      if (isEmpty) {
+        return res.status(404).send({ message: 'Нет проектов', projects: [] });
+      }
+      return res.send({ message: 'Данные успешно загружены', projects });
     }
-    return res.send({ message: 'Данные успешно загружены', projects });
   } catch (e) {
     next(e);
   }

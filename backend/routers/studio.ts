@@ -3,6 +3,7 @@ import auth, { RequestWithUser } from '../middleware/auth';
 import Studio from '../models/Studio';
 import { StudioData, StudioDataWithOwner } from '../types';
 import mongoose from 'mongoose';
+import Project from '../models/Project';
 
 const studioRouter = Router();
 
@@ -21,6 +22,8 @@ studioRouter.get('/', auth, async (req: RequestWithUser, res, next) => {
     if (!studio) {
       return res.status(404).send({ error: 'Студия не найдена', studio: {} });
     }
+
+    const projectCheck = await Project.find({ studioId: studio._id });
 
     return res.send({ message: 'Студия успешно найдена', studio });
   } catch (e) {
