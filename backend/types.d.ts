@@ -27,6 +27,7 @@ export interface IProject {
   team: Team;
 }
 export interface ProjectData {
+  studioId: string;
   name: string;
   team: TeamMember[];
   expireAt: string;

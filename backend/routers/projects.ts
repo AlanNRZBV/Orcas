@@ -13,7 +13,8 @@ projectsRouter.get('/', auth, async (req: RequestWithUser, res, next) => {
     const user = req.user?._id;
 
     if ('studio' in req.query) {
-      const id = req.query.studio;
+      const id = req.query.studio as string;
+
       const isStudioExists = await Studio.findById(id);
 
       if (!isStudioExists) {
@@ -51,11 +52,24 @@ projectsRouter.get('/', auth, async (req: RequestWithUser, res, next) => {
   }
 });
 
-projectsRouter.post('/add-project', auth, async (req, res, next) => {
+projectsRouter.post('/add', auth, async (req: RequestWithUser, res, next) => {
   try {
+    const user = req.user?._id;
+    const id = req.body.studioId;
+    const isStudioExists = await Studio.findById(id);
+
+    if (!isStudioExists) {
+      return res.status(404).send({ error: 'Студия не найдена', studio: {} });
+    }
+
+    if (isStudioExists.owner.toString() !== user?.toString()) {
+      return res.status(422).send({ error: 'Нет доступа', studio: {} });
+    }
+
     const projectData: ProjectData = {
+      studioId: req.body.studioId,
       name: req.body.name,
-      team: req.body.team,
+      team: req.body.team ? req.body.team : [],
       expireAt: req.body.expireAt,
     };
 
@@ -81,6 +95,7 @@ projectsRouter.patch('/update/:id', auth, async (req, res, next) => {
     }
 
     const projectData: ProjectData = {
+      studioId: req.body.studioId,
       name: req.body.name,
       team: req.body.team,
       expireAt: req.body.expireAt,
