@@ -74,7 +74,10 @@ projectsRouter.post('/add', auth, async (req: RequestWithUser, res, next) => {
     };
 
     const project = new Project(projectData);
-    await project.save();
+    const savedProject = await project.save();
+
+    isStudioExists.projects.push(savedProject._id);
+    await isStudioExists.save();
 
     return res.send({ message: 'Проект успешно создан', project });
   } catch (e) {
