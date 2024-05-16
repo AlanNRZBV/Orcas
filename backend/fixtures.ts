@@ -204,7 +204,7 @@ const run = async () => {
         },
       ],
       teams: [],
-      projects: [{}],
+      projects: [],
     });
 
     await db.close();

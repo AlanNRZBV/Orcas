@@ -22,14 +22,16 @@ const StudioSchema = new mongoose.Schema({
   },
   projects: [
     {
-      type: Schema.Types.ObjectId,
-      ref: 'Project',
-      validate: {
-        validator: async (value: Types.ObjectId) => {
-          const project = await Project.findById(value);
-          return Boolean(project);
+      projectId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Project',
+        validate: {
+          validator: async (value: Types.ObjectId) => {
+            const project = await Project.findById(value);
+            return Boolean(project);
+          },
+          message: 'VALIDATOR ERROR: Project does not exist!',
         },
-        message: 'VALIDATOR ERROR: Project does not exist!',
       },
     },
   ],
