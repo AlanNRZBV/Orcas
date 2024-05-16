@@ -19,6 +19,22 @@ const ProjectSchema = new Schema({
     type: String,
     required: true,
   },
+  tasks: [
+    {
+      taskId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Task',
+        validate: {
+          validator: async (value: Types.ObjectId) => {
+            const task = await Project.findById(value);
+            return Boolean(task);
+          },
+          message: 'VALIDATOR ERROR: Project does not exist!',
+        },
+      },
+    },
+  ],
+
   team: [
     {
       teamId: {
