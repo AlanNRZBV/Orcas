@@ -118,9 +118,6 @@ studioRouter.delete('/:id', auth, async (req: RequestWithUser, res, next) => {
 
     const check = await Studio.findOne({ _id: id });
 
-    console.log(check?.owner.toString());
-    console.log(userId?.toString());
-
     if (check?.owner.toString() !== userId?.toString()) {
       return res.status(422).send({ error: 'Нет доступа', studio: {} });
     }
