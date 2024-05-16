@@ -1,11 +1,16 @@
-import { Model } from 'mongoose';
+import { Model, Schema } from 'mongoose';
+import { Test } from './constants';
 
 export interface StudioData {
   name: string;
-  owner: string;
   staff: string[];
   teams: Team[];
   projects: IProject[];
+}
+
+export interface StudioDataWithOwner extends StudioData {
+  name: string;
+  owner: string;
 }
 
 export interface Team {

@@ -2,7 +2,6 @@ import mongoose, { model, Schema, Types } from 'mongoose';
 import Project from './Project';
 import User from './User';
 import Team from './Team';
-import { rank, roles } from '../constants';
 
 const StudioSchema = new mongoose.Schema({
   name: {
@@ -48,20 +47,11 @@ const StudioSchema = new mongoose.Schema({
         },
       },
       spec: {
-        type: {
-          name: {
-            type: String,
-            enum: roles,
-          },
-          rank: {
-            type: String,
-            enum: rank,
-          },
+        name: {
+          type: String,
         },
-        required: true,
-        default: {
-          name: 'unassigned',
-          rank: 'unassigned',
+        rank: {
+          type: String,
         },
       },
     },
