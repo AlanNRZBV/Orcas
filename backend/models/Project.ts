@@ -51,5 +51,13 @@ const ProjectSchema = new Schema({
   },
 });
 
+ProjectSchema.post('findOneAndDelete', async function (project) {
+  try {
+    await Studio.updateMany({ 'projects.projectId': project._id }, { $pull: { projects: { projectId: project._id } } });
+  } catch (e) {
+    console.log('Caught in middleware on try - ON TEAM DELETE - ', e);
+  }
+});
+
 const Project = model('Project', ProjectSchema);
 export default Project;

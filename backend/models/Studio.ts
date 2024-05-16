@@ -73,5 +73,14 @@ const StudioSchema = new mongoose.Schema({
   ],
 });
 
+StudioSchema.post('findOneAndDelete', async function (studio) {
+  try {
+    await Team.deleteMany({ studioId: studio._id });
+    await Project.deleteMany({ studioId: studio._id });
+  } catch (e) {
+    console.log('Caught in middleware on try - ON STUDIO DELETE - ', e);
+  }
+});
+
 const Studio = model('Studio', StudioSchema);
 export default Studio;

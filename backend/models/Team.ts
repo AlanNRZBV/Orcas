@@ -46,7 +46,9 @@ TeamSchema.post('findOneAndDelete', async function (team) {
   try {
     await Studio.updateMany({ 'teams.teamId': team._id }, { $pull: { teams: { teamId: team._id } } });
     await Project.updateMany({ 'team.teamId': team._id }, { $pull: { team: { teamId: team._id } } });
-  } catch (e) {}
+  } catch (e) {
+    console.log('Caught in middleware on try - ON TEAM DELETE - ', e);
+  }
 });
 
 const Team = model('Team', TeamSchema);
