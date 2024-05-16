@@ -3,7 +3,6 @@ import auth, { RequestWithUser } from '../middleware/auth';
 import Project from '../models/Project';
 import { ProjectData } from '../types';
 import mongoose from 'mongoose';
-import permit from '../middleware/permit';
 import Studio from '../models/Studio';
 
 const projectsRouter = Router();
@@ -112,13 +111,21 @@ projectsRouter.patch('/update/:id', auth, async (req, res, next) => {
   }
 });
 
-projectsRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
+projectsRouter.delete('/delete/:id', auth, async (req: RequestWithUser, res, next) => {
   try {
+    const user = req.user?._id;
     const id = req.params.id;
     const isExist = await Project.findOne({ _id: id });
 
     if (!isExist) {
       return res.status(404).send({ message: 'Проекта не существует', project: {} });
+    }
+
+    const studioId = isExist.studioId;
+    const studio = await Studio.findById(studioId); //ToDo refactor this
+
+    if (studio?.owner.toString() !== user?.toString()) {
+      return res.status(422).send({ error: 'Нет доступа', studio: {} });
     }
 
     const deletedProject = await Project.findOneAndDelete({ _id: id });
