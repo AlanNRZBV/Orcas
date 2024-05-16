@@ -3,7 +3,6 @@ import auth, { RequestWithUser } from '../middleware/auth';
 import Studio from '../models/Studio';
 import { StudioData, StudioDataWithOwner } from '../types';
 import mongoose from 'mongoose';
-import Project from '../models/Project';
 
 const studioRouter = Router();
 
@@ -11,19 +10,47 @@ studioRouter.get('/', auth, async (req: RequestWithUser, res, next) => {
   try {
     const ownerId = req.user?._id;
 
-    if (!ownerId) {
-      return res.status(404).send({ error: 'Пользователь не найден', user: {} });
-    }
-
     const studio = await Studio.findOne({ owner: ownerId })
       .populate('owner', 'firstName lastName')
-      .populate({ path: 'staff', populate: { path: 'userId', select: 'firstName lastName' } });
+      .populate({
+        path: 'projects',
+        populate: {
+          path: 'projectId',
+          select: '-studioId',
+          populate: {
+            path: 'team',
+            select: '-studioId',
+            populate: {
+              path: 'teamId',
+            },
+          },
+        },
+      })
+      .populate({
+        path: 'staff',
+        populate: {
+          path: 'userId',
+          select: 'firstName lastName',
+        },
+      })
+      .populate({
+        path: 'teams',
+        populate: {
+          path: 'teamId',
+          select: 'name members',
+          populate: {
+            path: 'members',
+            populate: {
+              path: 'userId',
+              select: 'firstName lastName',
+            },
+          },
+        },
+      });
 
     if (!studio) {
       return res.status(404).send({ error: 'Студия не найдена', studio: {} });
     }
-
-    const projectCheck = await Project.find({ studioId: studio._id });
 
     return res.send({ message: 'Студия успешно найдена', studio });
   } catch (e) {
@@ -46,14 +73,14 @@ studioRouter.post('/', auth, async (req, res, next) => {
 
     return res.send({ message: 'Студия успешно создана', studio });
   } catch (e) {
-    if (e instanceof mongoose.Error.ValidationError) {
-      return res.status(422).send(e);
+    if (e instanceof mongoose.Error.ValidationError || e instanceof mongoose.Error.CastError) {
+      return res.status(422).send({ message: 'Ошибка проверки данных', errorMsg: e });
     }
     next(e);
   }
 });
 
-studioRouter.patch('/:id', auth, async (req, res, next) => {
+studioRouter.patch('/update/:id', auth, async (req, res, next) => {
   try {
     const id = req.params.id;
     const isExist = await Studio.findById(id);
@@ -74,7 +101,7 @@ studioRouter.patch('/:id', auth, async (req, res, next) => {
     return res.send({ message: 'Студия успешно обновлена', studio: updatedStudio });
   } catch (e) {
     if (e instanceof mongoose.Error.ValidationError || e instanceof mongoose.Error.CastError) {
-      return res.status(422).send(e);
+      return res.status(422).send({ message: 'Ошибка проверки данных', errorMsg: e });
     }
     next(e);
   }
@@ -102,9 +129,6 @@ studioRouter.delete('/:id', auth, async (req: RequestWithUser, res, next) => {
 
     return res.send({ message: 'Студия успешно удалена', studio: deletedStudio });
   } catch (e) {
-    if (e instanceof mongoose.Error.ValidationError) {
-      return res.status(422).send(e);
-    }
     next(e);
   }
 });
