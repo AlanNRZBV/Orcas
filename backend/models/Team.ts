@@ -44,11 +44,8 @@ const TeamSchema = new mongoose.Schema({
 
 TeamSchema.post('findOneAndDelete', async function (team) {
   try {
-    const s = await Studio.updateMany(
-      { 'teams.teamId': team._id },
-      { $pull: { teams: { teamId: team._id } } },
-      { new: true },
-    );
+    await Studio.updateMany({ 'teams.teamId': team._id }, { $pull: { teams: { teamId: team._id } } });
+    await Project.updateMany({ 'team.teamId': team._id }, { $pull: { team: { teamId: team._id } } });
   } catch (e) {}
 });
 
